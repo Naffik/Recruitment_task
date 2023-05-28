@@ -92,8 +92,8 @@ def test_get_top_products(currencies_file, data_file, matchings_file):
     data = load_data(data_file)
 
     expected_results = [
-        {'matching_id': '1', 'total_price': 2205.0, 'avg_price': 2205.0, 'currency': 'EU', 'ignored_products_count': 0},
-        {'matching_id': '3', 'total_price': 4800.0, 'avg_price': 2400.0, 'currency': 'GBP', 'ignored_products_count': 0}
+        {'matching_id': '1', 'total_price': 1050.0, 'avg_price': 1050.0, 'currency': 'EU', 'ignored_products_count': 0},
+        {'matching_id': '3', 'total_price': 2000.0, 'avg_price': 1000.0, 'currency': 'GBP', 'ignored_products_count': 0}
     ]
 
     top_products = get_top_products(data, currencies, matchings)

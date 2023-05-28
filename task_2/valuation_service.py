@@ -19,7 +19,6 @@ def load_currencies(filename: str) -> dict:
             currency = line['currency']
             ratio = float(line['ratio'])
             currencies[currency] = ratio
-    # print(currencies)
     return currencies
 
 
@@ -31,7 +30,6 @@ def load_matchings(filename: str) -> dict:
             matching_id = line['matching_id']
             top_priced_count = line['top_priced_count']
             matchings[matching_id] = top_priced_count
-    # print(matchings)
     return matchings
 
 
@@ -57,25 +55,22 @@ def get_top_products(data: list, currencies: dict, matchings: dict) -> list:
 
     for matching_id, top_products_count in matchings.items():
         matching_data = [product for product in data if int(product['matching_id']) == int(matching_id)]
-        matching_data.sort(key=lambda product: calculate_total_price(float(product['price']),
-                                                                     int(product['quantity'])), reverse=True)
+        matching_data.sort(key=lambda product: calculate_total_price(
+            convert_to_pln(float(product['price']), currencies.get(product['currency'])),
+            int(product['quantity'])), reverse=True)
         ignored_products_count = len(matching_data) - int(top_products_count)
         matching_data = matching_data[:int(top_products_count)]
-
         for product in matching_data:
             price = float(product['price'])
             quantity = int(product['quantity'])
             currency = product['currency']
-            ratio = currencies.get(currency)
-            pln_price = convert_to_pln(price, ratio)
-            total_price = calculate_total_price(pln_price, quantity)
+            total_price = calculate_total_price(price, quantity)
             avg_price = total_price / quantity
             top_products.append({'matching_id': product['matching_id'],
                                  'total_price': total_price,
                                  'avg_price': avg_price,
-                                 'currency': product['currency'],
+                                 'currency': currency,
                                  'ignored_products_count': ignored_products_count})
-    # print(top_products)
 
     return top_products
 
